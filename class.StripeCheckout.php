@@ -38,15 +38,15 @@ function parse_checkout_request() {
 
           $settings = maybe_unserialize(get_option('_wpmp_settings'));
   
-          $TestMode =  $settings['Stripe']['Stripe_mode'];
+          $TestMode =  $settings['StripeCheckout']['Stripe_mode'];
 
-          $StripeProdAPIKey = $settings['Stripe']['stripe_prod_api_key'];
+          $StripeProdAPIKey = $settings['StripeCheckout']['stripe_prod_api_key'];
           
-          if($settings['Stripe']['Stripe_mode']=='sandbox') {
+          if($settings['StripeCheckout']['Stripe_mode']=='sandbox') {
               $StripeMode = "TEST MODE: ";
-              $StripeKey = $settings['Stripe']['stripe_test_api_key'];
+              $StripeKey = $settings['StripeCheckout']['stripe_test_api_key'];
           } else {
-              $StripeKey = $settings['Stripe']['stripe_prod_api_key'];
+              $StripeKey = $settings['StripeCheckout']['stripe_prod_api_key'];
           }
     
           $token = $_POST['stripeToken'];
@@ -113,23 +113,23 @@ class StripeCheckout extends CommonVers{
         }
         
         $settings = maybe_unserialize(get_option('_wpmp_settings'));
-        $this->Enabled= isset($settings['Stripe']['enabled'])?$settings['Stripe']['enabled']:"";
-        $this->ReturnUrl = $settings['Stripe']['return_url'];
+        $this->Enabled= isset($settings['StripeCheckout']['enabled'])?$settings['StripeCheckout']['enabled']:"";
+        $this->ReturnUrl = $settings['StripeCheckout']['return_url'];
         //$this->NotifyUrl = home_url('/Stripe/notify/');
         $this->NotifyUrl = home_url('?action=wpmp-payment-notification&class=StripeCheckout');
-        $this->CancelUrl = $settings['Stripe']['cancel_url'];
-        $this->StripeTestAPIKey = $settings['Stripe']['stripe_test_api_key'];
-        $this->StripeProdAPIKey = $settings['Stripe']['stripe_prod_api_key'];
-        $this->Business =  $settings['Stripe']['Paypal_email'];
-        $this->TestMode =  $settings['Stripe']['Stripe_mode'];
-        //$this->Currency =  $settings['Stripe']['currency'];
+        $this->CancelUrl = $settings['StripeCheckout']['cancel_url'];
+        $this->StripeTestAPIKey = $settings['StripeCheckout']['stripe_test_api_key'];
+        $this->StripeProdAPIKey = $settings['StripeCheckout']['stripe_prod_api_key'];
+        $this->Business =  $settings['StripeCheckout']['Paypal_email'];
+        $this->TestMode =  $settings['StripeCheckout']['Stripe_mode'];
+        //$this->Currency =  $settings['StripeCheckout']['currency'];
         $this->Currency =  get_option('_wpmp_curr_name','USD');
         
-        if($settings['Stripe']['Stripe_mode']=='sandbox') {
+        if($settings['StripeCheckout']['Stripe_mode']=='sandbox') {
             $this->GatewayUrl = $this->GatewayUrl_TestMode;
         }
 
-        if($settings['Stripe']['Stripe_mode']=='sandbox') {
+        if($settings['StripeCheckout']['Stripe_mode']=='sandbox') {
             $this->StripeAPIKey = $this->StripeTestAPIKey;
             $this->StripeMode = "TEST MODE: ";
         } else {
@@ -146,13 +146,13 @@ class StripeCheckout extends CommonVers{
         else $enabled = "";
         
         $data='<table>
-<tr><td>'.__("Enable/Disable:","wpmarketplace").'</td><td><input type="checkbox" value="1" '.$enabled.' name="_wpmp_settings[Stripe][enabled]" style=""> '.__("Enable Stripe","wpmarketplace").'</td></tr>
-<tr><td>'.__("Stripe Mode:","wpmarketplace").'</td><td><select id="Stripe_mode" name="_wpmp_settings[Stripe][Stripe_mode]"><option value="live">Live</option><option value="sandbox" >SandBox</option></select></td></tr>
-<tr><td>'.__("Stripe Email:","wpmarketplace").'</td><td><input type="text" name="_wpmp_settings[Stripe][Paypal_email]" value="'.$this->Business.'" /></td></tr>
-<tr><td>'.__("Cancel Url:","wpmarketplace").'</td><td><input type="text" name="_wpmp_settings[Stripe][cancel_url]" value="'.$this->CancelUrl.'" /></td></tr>
-<tr><td>'.__("Stripe Test Publishable Key:","wpmarketplace").'</td><td><input type="text" name="_wpmp_settings[Stripe][stripe_test_api_key]" value="'.$this->StripeTestAPIKey.'" /></td></tr>
-<tr><td>'.__("Stripe Prod Publishable Key:","wpmarketplace").'</td><td><input type="text" name="_wpmp_settings[Stripe][stripe_prod_api_key]" value="'.$this->StripeProdAPIKey.'" /></td></tr>
-<tr><td>'.__("Return Url:","wpmarketplace").'</td><td><input type="text" name="_wpmp_settings[Stripe][return_url]" value="'.$this->ReturnUrl.'" /></td></tr>
+<tr><td>'.__("Enable/Disable:","wpmarketplace").'</td><td><input type="checkbox" value="1" '.$enabled.' name="_wpmp_settings[StripeCheckout][enabled]" style=""> '.__("Enable Stripe","wpmarketplace").'</td></tr>
+<tr><td>'.__("Stripe Mode:","wpmarketplace").'</td><td><select id="StripeCheckout_mode" name="_wpmp_settings[StripeCheckout][StripeCheckout_mode]"><option value="live">Live</option><option value="sandbox" >SandBox</option></select></td></tr>
+<tr><td>'.__("Stripe Email:","wpmarketplace").'</td><td><input type="text" name="_wpmp_settings[StripeCheckout][Paypal_email]" value="'.$this->Business.'" /></td></tr>
+<tr><td>'.__("Cancel Url:","wpmarketplace").'</td><td><input type="text" name="_wpmp_settings[StripeCheckout][cancel_url]" value="'.$this->CancelUrl.'" /></td></tr>
+<tr><td>'.__("Stripe Test Publishable Key:","wpmarketplace").'</td><td><input type="text" name="_wpmp_settings[StripeCheckout][stripe_test_api_key]" value="'.$this->StripeTestAPIKey.'" /></td></tr>
+<tr><td>'.__("Stripe Prod Publishable Key:","wpmarketplace").'</td><td><input type="text" name="_wpmp_settings[StripeCheckout][stripe_prod_api_key]" value="'.$this->StripeProdAPIKey.'" /></td></tr>
+<tr><td>'.__("Return Url:","wpmarketplace").'</td><td><input type="text" name="_wpmp_settings[StripeCheckout][return_url]" value="'.$this->ReturnUrl.'" /></td></tr>
 
 </table>
 <script>
