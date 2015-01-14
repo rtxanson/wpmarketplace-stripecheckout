@@ -105,7 +105,7 @@ class StripeCheckout extends CommonVers{
     var $order_id;
     
     
-    function Stripe($TestMode = 0){
+    function StripeCheckout($TestMode = 0){
         $this->TestMode = $TestMode;                
 
         if($TestMode==1) {
