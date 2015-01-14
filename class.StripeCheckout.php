@@ -251,7 +251,7 @@ select_my_list("stripe_mode","'.$this->TestMode.'");
            $this->order_id = $_POST['invoice'];
 
            $order = new Order();
-           $this->order_info = $order->GetOrder($_SESSION['orderid']);
+           $this->order_info = $order->GetOrder($this->order_id);
 
            return $this->VerifyPayment();
        } else { 
