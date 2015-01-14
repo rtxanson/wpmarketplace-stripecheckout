@@ -116,7 +116,7 @@ class StripeCheckout extends CommonVers{
         $this->Enabled= isset($settings['Stripe']['enabled'])?$settings['Stripe']['enabled']:"";
         $this->ReturnUrl = $settings['Stripe']['return_url'];
         //$this->NotifyUrl = home_url('/Stripe/notify/');
-        $this->NotifyUrl = home_url('?action=wpmp-payment-notification&class=Stripe');
+        $this->NotifyUrl = home_url('?action=wpmp-payment-notification&class=StripeCheckout');
         $this->CancelUrl = $settings['Stripe']['cancel_url'];
         $this->StripeTestAPIKey = $settings['Stripe']['stripe_test_api_key'];
         $this->StripeProdAPIKey = $settings['Stripe']['stripe_prod_api_key'];
