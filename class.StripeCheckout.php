@@ -120,7 +120,7 @@ class StripeCheckout extends CommonVers{
         $this->CancelUrl = $settings['StripeCheckout']['cancel_url'];
         $this->StripeTestAPIKey = $settings['StripeCheckout']['stripe_test_api_key'];
         $this->StripeProdAPIKey = $settings['StripeCheckout']['stripe_prod_api_key'];
-        $this->Business =  $settings['StripeCheckout']['Paypal_email'];
+        $this->Business =  $settings['StripeCheckout']['StripeCheckout_email'];
         $this->TestMode =  $settings['StripeCheckout']['StripeCheckout_mode'];
         //$this->Currency =  $settings['StripeCheckout']['currency'];
         $this->Currency =  get_option('_wpmp_curr_name','USD');
@@ -148,7 +148,7 @@ class StripeCheckout extends CommonVers{
         $data='<table>
 <tr><td>'.__("Enable/Disable:","wpmarketplace").'</td><td><input type="checkbox" value="1" '.$enabled.' name="_wpmp_settings[StripeCheckout][enabled]" style=""> '.__("Enable Stripe","wpmarketplace").'</td></tr>
 <tr><td>'.__("Stripe Mode:","wpmarketplace").'</td><td><select id="StripeCheckout_mode" name="_wpmp_settings[StripeCheckout][StripeCheckout_mode]"><option value="live">Live</option><option value="sandbox" >SandBox</option></select></td></tr>
-<tr><td>'.__("Stripe Email:","wpmarketplace").'</td><td><input type="text" name="_wpmp_settings[StripeCheckout][Paypal_email]" value="'.$this->Business.'" /></td></tr>
+<tr><td>'.__("Stripe Email:","wpmarketplace").'</td><td><input type="text" name="_wpmp_settings[StripeCheckout][StripeCheckout_email]" value="'.$this->Business.'" /></td></tr>
 <tr><td>'.__("Cancel Url:","wpmarketplace").'</td><td><input type="text" name="_wpmp_settings[StripeCheckout][cancel_url]" value="'.$this->CancelUrl.'" /></td></tr>
 <tr><td>'.__("Stripe Test Publishable Key:","wpmarketplace").'</td><td><input type="text" name="_wpmp_settings[StripeCheckout][stripe_test_api_key]" value="'.$this->StripeTestAPIKey.'" /></td></tr>
 <tr><td>'.__("Stripe Prod Publishable Key:","wpmarketplace").'</td><td><input type="text" name="_wpmp_settings[StripeCheckout][stripe_prod_api_key]" value="'.$this->StripeProdAPIKey.'" /></td></tr>
@@ -186,7 +186,7 @@ select_my_list("StripeCheckout_mode","'.$this->TestMode.'");
                       <input type='hidden' name='custom' value='{$this->Custom}' />
                       <input type='hidden' name='invoice' value='{$this->InvoiceNo}' />
                       <input type='hidden' name='action' value='wpmp-payment-notification' />
-                      <input type='hidden' name='class' value='Stripe' />
+                      <input type='hidden' name='class' value='StripeCheckout' />
                     </form>
         ";
         
