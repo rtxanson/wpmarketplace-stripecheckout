@@ -38,11 +38,11 @@ function parse_checkout_request() {
 
           $settings = maybe_unserialize(get_option('_wpmp_settings'));
   
-          $TestMode =  $settings['StripeCheckout']['Stripe_mode'];
+          $TestMode =  $settings['StripeCheckout']['StripeCheckout_mode'];
 
           $StripeProdAPIKey = $settings['StripeCheckout']['stripe_prod_api_key'];
           
-          if($settings['StripeCheckout']['Stripe_mode']=='sandbox') {
+          if($settings['StripeCheckout']['StripeCheckout_mode']=='sandbox') {
               $StripeMode = "TEST MODE: ";
               $StripeKey = $settings['StripeCheckout']['stripe_test_api_key'];
           } else {
@@ -121,15 +121,15 @@ class StripeCheckout extends CommonVers{
         $this->StripeTestAPIKey = $settings['StripeCheckout']['stripe_test_api_key'];
         $this->StripeProdAPIKey = $settings['StripeCheckout']['stripe_prod_api_key'];
         $this->Business =  $settings['StripeCheckout']['Paypal_email'];
-        $this->TestMode =  $settings['StripeCheckout']['Stripe_mode'];
+        $this->TestMode =  $settings['StripeCheckout']['StripeCheckout_mode'];
         //$this->Currency =  $settings['StripeCheckout']['currency'];
         $this->Currency =  get_option('_wpmp_curr_name','USD');
         
-        if($settings['StripeCheckout']['Stripe_mode']=='sandbox') {
+        if($settings['StripeCheckout']['StripeCheckout_mode']=='sandbox') {
             $this->GatewayUrl = $this->GatewayUrl_TestMode;
         }
 
-        if($settings['StripeCheckout']['Stripe_mode']=='sandbox') {
+        if($settings['StripeCheckout']['StripeCheckout_mode']=='sandbox') {
             $this->StripeAPIKey = $this->StripeTestAPIKey;
             $this->StripeMode = "TEST MODE: ";
         } else {
@@ -156,7 +156,7 @@ class StripeCheckout extends CommonVers{
 
 </table>
 <script>
-select_my_list("Stripe_mode","'.$this->TestMode.'");
+select_my_list("StripeCheckout_mode","'.$this->TestMode.'");
 </script>
 ';
         return $data;
