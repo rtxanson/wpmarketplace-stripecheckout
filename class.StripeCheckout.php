@@ -22,6 +22,7 @@
  */
 
 require_once(ABSPATH . 'vendor/stripe/stripe-php/lib/Stripe.php');
+require_once(WPMP_BASE_DIR . '/libs/class.order.php');
 
 add_action('parse_request', 'parse_checkout_request');
 // TEST
@@ -230,6 +231,10 @@ select_my_list("stripe_mode","'.$this->TestMode.'");
         // array(3) { ["stripeToken"]=> string(28) "tok_15KdcZAGP9Cgrd9djsKycGVi" ["stripeTokenType"]=> string(4) "card" ["stripeEmail"]=> string(22) "ryan.txanson@gmail.com" }
 
           echo var_dump($_POST);
+
+          echo var_dump($this->Amount);
+          echo var_dump($this->order_info);
+
           die();
 
           if ($stripe_verified) {
@@ -244,6 +249,10 @@ select_my_list("stripe_mode","'.$this->TestMode.'");
    function VerifyNotification() {
        if ($_POST) {
            $this->order_id = $_POST['invoice'];
+
+           $order = new Order();
+           $this->order_info = $order->GetOrder($_SESSION['orderid']);
+
            return $this->VerifyPayment();
        } else { 
            die("Problem occured in payment.");
