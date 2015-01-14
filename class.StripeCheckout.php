@@ -21,7 +21,7 @@
  *
  */
 
-// require_once(ABSPATH . 'vendor/stripe/stripe-php/lib/Stripe.php');
+require_once(ABSPATH . 'vendor/stripe/stripe-php/lib/Stripe.php');
 
 add_action('parse_request', 'parse_checkout_request');
 // TEST
