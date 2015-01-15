@@ -128,6 +128,8 @@ class StripeCheckout extends CommonVers{
         $this->CancelUrl = $settings['StripeCheckout']['cancel_url'];
         $this->StripeTestAPIKey = $settings['StripeCheckout']['stripe_test_api_key'];
         $this->StripeProdAPIKey = $settings['StripeCheckout']['stripe_prod_api_key'];
+        $this->StripeTestSecretAPIKey = $settings['StripeCheckout']['stripe_test_secret_api_key'];
+        $this->StripeProdSecretAPIKey = $settings['StripeCheckout']['stripe_prod_secret_api_key'];
         $this->Business =  $settings['StripeCheckout']['stripe_email'];
         $this->TestMode =  $settings['StripeCheckout']['stripe_mode'];
         //$this->Currency =  $settings['StripeCheckout']['currency'];
@@ -139,9 +141,11 @@ class StripeCheckout extends CommonVers{
 
         if($settings['StripeCheckout']['stripe_mode']=='sandbox') {
             $this->StripeAPIKey = $this->StripeTestAPIKey;
+            $this->StripeSecretAPIKey = $this->StripeTestSecretAPIKey;
             $this->StripeMode = "TEST MODE: ";
         } else {
             $this->StripeAPIKey = $this->StripeProdAPIKey;
+            $this->StripeSecretAPIKey = $this->StripeProdSecretAPIKey;
         }
     }
     
@@ -160,6 +164,8 @@ class StripeCheckout extends CommonVers{
 <tr><td>'.__("Cancel Url:","wpmarketplace").'</td><td><input type="text" name="_wpmp_settings[StripeCheckout][cancel_url]" value="'.$this->CancelUrl.'" /></td></tr>
 <tr><td>'.__("Stripe Test Publishable Key:","wpmarketplace").'</td><td><input type="text" name="_wpmp_settings[StripeCheckout][stripe_test_api_key]" value="'.$this->StripeTestAPIKey.'" /></td></tr>
 <tr><td>'.__("Stripe Prod Publishable Key:","wpmarketplace").'</td><td><input type="text" name="_wpmp_settings[StripeCheckout][stripe_prod_api_key]" value="'.$this->StripeProdAPIKey.'" /></td></tr>
+<tr><td>'.__("Stripe Test Secret Key:","wpmarketplace").'</td><td><input type="text" name="_wpmp_settings[StripeCheckout][stripe_test_secret_api_key]" value="'.$this->StripeTestSecretAPIKey.'" /></td></tr>
+<tr><td>'.__("Stripe Prod Secret Key:","wpmarketplace").'</td><td><input type="text" name="_wpmp_settings[StripeCheckout][stripe_prod_secret_api_key]" value="'.$this->StripeProdSecretAPIKey.'" /></td></tr>
 <tr><td>'.__("Return Url:","wpmarketplace").'</td><td><input type="text" name="_wpmp_settings[StripeCheckout][return_url]" value="'.$this->ReturnUrl.'" /></td></tr>
 
 </table>
@@ -216,7 +222,7 @@ select_my_list("stripe_mode","'.$this->TestMode.'");
 
           $stripe_verified = false;
 
-          Stripe::setApiKey($this->StripeAPIKey);
+          Stripe::setApiKey($this->StripeSecretAPIKey);
           echo "logging\n";
 
           $this->StripeToken = $_POST['stripeToken'];
