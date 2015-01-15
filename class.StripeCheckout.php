@@ -242,14 +242,14 @@ select_my_list("stripe_mode","'.$this->TestMode.'");
           echo "\n"
 
           echo var_dump($this->order_info);
-          echo "\n"
+          echo "\n";
           // order_amount is a string of numbers, 
           echo var_dump($this->order_amount);
-          echo "\n"
+          echo "\n";
 
           $order_amount_cents  = order_amount_to_cents($this->order_amount);
           echo var_dump($order_amount_cents);
-          echo "\n"
+          echo "\n";
 
           die();
 
