@@ -80,6 +80,13 @@ function parse_checkout_request() {
 
 }
 
+function order_amount_to_cents($string) {
+    $float_val = (float) $string;
+    $float_val_cents = $float_val * 100;
+    $float_val_str = (string) $float_val_cents;
+    return $float_val_cents;
+}
+
 if(!class_exists('StripeCheckout')){
 
 class StripeCheckout extends CommonVers{
@@ -168,6 +175,7 @@ select_my_list("stripe_mode","'.$this->TestMode.'");
                         
     function ShowPaymentForm($AutoSubmit = 0){
         
+        $amount_cents = order_amount_to_cents($this->Amount);
         // TODO: https for stripe include
         $Stripe = plugins_url().'/wpdm-premium-packages/images/Stripe.png';
         // TODO: action='/stripe/checkout' ? 
@@ -180,7 +188,7 @@ select_my_list("stripe_mode","'.$this->TestMode.'");
                         data-image='/square-image.png'
                         data-name='{$this->Business}'
                         data-currency='{$this->Currency}'
-                        data-amount='{$this->Amount}'>
+                        data-amount='{$amount_cents}'>
                         data-description='Invoice. {$this->InvoiceNo}, {$this->OrderTitle}'
                         data-email'{$this->ClientEmail}'
                       </script>
@@ -231,9 +239,17 @@ select_my_list("stripe_mode","'.$this->TestMode.'");
         // array(3) { ["stripeToken"]=> string(28) "tok_15KdcZAGP9Cgrd9djsKycGVi" ["stripeTokenType"]=> string(4) "card" ["stripeEmail"]=> string(22) "ryan.txanson@gmail.com" }
 
           echo var_dump($_POST);
+          echo "\n"
 
-          echo var_dump($this->Amount);
           echo var_dump($this->order_info);
+          echo "\n"
+          // order_amount is a string of numbers, 
+          echo var_dump($this->order_amount);
+          echo "\n"
+
+          $order_amount_cents  = order_amount_to_cents($this->order_amount);
+          echo var_dump($order_amount_cents);
+          echo "\n"
 
           die();
 
@@ -252,6 +268,7 @@ select_my_list("stripe_mode","'.$this->TestMode.'");
 
            $order = new Order();
            $this->order_info = $order->GetOrder($this->order_id);
+           $this->order_amount = $this->order_info->total;
 
            return $this->VerifyPayment();
        } else { 
