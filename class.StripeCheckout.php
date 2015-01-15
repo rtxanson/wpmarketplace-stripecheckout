@@ -231,6 +231,8 @@ select_my_list("stripe_mode","'.$this->TestMode.'");
 
           $order_desc = "Invoice. " . $this->order_info->order_id . " to " . $this->StripeEmail;
 
+          // TODO: possible to include URL to invoice in WP ? we probably want 
+          // more descriptive info here: all parts, etc.
           $stripe_order = array(
                 "amount" => order_amount_to_cents($this->order_amount),
                 "currency" => "usd",
@@ -238,13 +240,13 @@ select_my_list("stripe_mode","'.$this->TestMode.'");
                 "description" => $order_desc,
           );
 
-          echo var_dump($stripe_order);
-          echo "\n";
-          
           try {
               $charge = Stripe_Charge::create($stripe_order);
+              $stripe_verified = true;
           } catch(Stripe_CardError $e) {
+              // TODO: what to dump?
               // The card has been declined
+              $this->VerificationError = var_dump($e);
           }
 
           die();
@@ -252,7 +254,6 @@ select_my_list("stripe_mode","'.$this->TestMode.'");
           if ($stripe_verified) {
              return true;       
           } else {
-             $this->VerificationError = 'Unable to process payment.';             
              return false;
           }
       
