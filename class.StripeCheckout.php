@@ -229,7 +229,7 @@ select_my_list("stripe_mode","'.$this->TestMode.'");
           echo "\n";
 
 
-          $order_desc = "Invoice. " . $this->order_info->invoice . " to " . $this->order_info->email;
+          $order_desc = "Invoice. " . $this->order_info->order_id . " to " . $this->stripeEmail;
 
           $stripe_order = array(
                 "amount" => order_amount_to_cents($this->order_amount),
