@@ -225,19 +225,11 @@ select_my_list("stripe_mode","'.$this->TestMode.'");
           $stripe_verified = false;
 
           Stripe::setApiKey($this->StripeSecretAPIKey);
-          echo "logging\n";
 
           $this->StripeToken = $_POST['stripeToken'];
           $this->StripeEmail = $_POST['stripeEmail'];
 
-          echo var_dump($_POST);
-          echo "\n";
-
-          echo var_dump($this->order_info);
-          echo "\n";
-
-
-          $order_desc = "Invoice. " . $this->order_info->order_id . " to " . $this->stripeEmail;
+          $order_desc = "Invoice. " . $this->order_info->order_id . " to " . $this->StripeEmail;
 
           $stripe_order = array(
                 "amount" => order_amount_to_cents($this->order_amount),
@@ -248,10 +240,9 @@ select_my_list("stripe_mode","'.$this->TestMode.'");
 
           echo var_dump($stripe_order);
           echo "\n";
-              
           
           try {
-              $charge = Stripe_Charge::create();
+              $charge = Stripe_Charge::create($stripe_order);
           } catch(Stripe_CardError $e) {
               // The card has been declined
           }
