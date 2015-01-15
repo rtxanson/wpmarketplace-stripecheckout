@@ -149,8 +149,27 @@ select_my_list("stripe_mode","'.$this->TestMode.'");
           $this->StripeToken = $_POST['stripeToken'];
           $this->StripeEmail = $_POST['stripeEmail'];
 
+          global $current_user; 
           $order_desc = "Invoice. {$this->order_info->order_id} to {$this->StripeEmail}";
+          $usermeta=unserialize(get_user_meta($current_user->ID, 'user_billing_shipping',true));
+          @extract($usermeta);
 
+          $shipping_address = <<<ADR
+$billing[first_name] $billing[last_name]
+$billing[company]
+$billing[address_1]
+$billing[address_2]
+$billing[city]
+$billing[state]
+$billing[postcode]
+$billing[country]
+ADR;
+
+          echo $shipping_address;
+          echo "\n\n";
+          echo $order_desc;
+
+          die()
           // TODO: possible to include URL to invoice in WP ? we probably want 
           // more descriptive info here: all parts, etc.
           $stripe_order = array(
@@ -158,6 +177,7 @@ select_my_list("stripe_mode","'.$this->TestMode.'");
                 "currency" => "usd",
                 "card" => $this->StripeToken,
                 "description" => $order_desc,
+                "shipping" => $shipping_address,
           );
 
           try {
