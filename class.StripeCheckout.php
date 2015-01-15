@@ -100,6 +100,8 @@ class StripeCheckout extends CommonVers{
     var $Business;
     var $StripeTestAPIKey;
     var $StripeProdAPIKey;
+    var $StripeTestSecretAPIKey;
+    var $StripeProdSecretAPIKey;
     var $StripeMode;
     var $ReturnUrl;
     var $NotifyUrl;
