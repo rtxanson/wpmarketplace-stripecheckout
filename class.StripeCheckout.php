@@ -11,74 +11,13 @@
  *  + User clicks on the Stripe submit button
  *  + User enters card information
  *  + Stripe creates a payment token (and does not yet make the charge)
- *  + Data is sent to an endpoint within WordPress, and WordPress uses the Stripe API to 
- *    make the charge.
- *
- *
- * The endpoint for handling the token is defined in: TODO
- *
- *
+ *  + Data is sent to an endpoint within WordPress, and WordPress uses the 
+ *    Stripe API to make the charge. (most of this happens in `VerifyNotification`)
  *
  */
 
 require_once(ABSPATH . 'vendor/stripe/stripe-php/lib/Stripe.php');
 require_once(WPMP_BASE_DIR . '/libs/class.order.php');
-
-add_action('parse_request', 'parse_checkout_request');
-// TEST
-//
-//  submissino results in something like:
-// array(3) { ["stripeToken"]=> string(28) "tok_15KdcZAGP9Cgrd9djsKycGVi" ["stripeTokenType"]=> string(4) "card" ["stripeEmail"]=> string(22) "ryan.txanson@gmail.com" }
-
-
-// TODO: should this go in verify payment func? 
-//
-function parse_checkout_request() {
-
-     if($_SERVER["REQUEST_URI"] == '/stripe/checkout') {
-
-          $settings = maybe_unserialize(get_option('_wpmp_settings'));
-  
-          $TestMode =  $settings['StripeCheckout']['stripe_mode'];
-
-          $StripeProdAPIKey = $settings['StripeCheckout']['stripe_prod_api_key'];
-          
-          if($settings['StripeCheckout']['stripe_mode']=='sandbox') {
-              $StripeMode = "TEST MODE: ";
-              $StripeKey = $settings['StripeCheckout']['stripe_test_api_key'];
-          } else {
-              $StripeKey = $settings['StripeCheckout']['stripe_prod_api_key'];
-          }
-    
-          $token = $_POST['stripeToken'];
-
-
-          // data-name='{$this->Business}'
-          // data-currency='{$this->Currency}'
-          // data-amount='{$this->Amount}'>
-          // data-description='Invoice. {$this->InvoiceNo}, {$this->OrderTitle}'
-          // data-email'{$this->ClientEmail}'
-          
-          // try {
-          //     $charge = Stripe_Charge::create(array(
-          //       "amount" => 100, // TODO: amount in cents, again
-          //       "currency" => "usd",
-          //       "card" => $token,
-          //       "description" => "payinguser@example.com")
-          //     );
-          // } catch(Stripe_CardError $e) {
-          //     // The card has been declined
-          // }
-
-          echo "<h1>TEST</h1>";
-          echo var_dump($_POST);
-          // Create charge
-          // TODO: where does WP Marketplace want us to redirect to for success or failure? 
-          //
-          exit();
-     }
-
-}
 
 function order_amount_to_cents($string) {
     $float_val = (float) $string;
@@ -122,6 +61,7 @@ class StripeCheckout extends CommonVers{
         $this->StripeProdSecretAPIKey = $settings['StripeCheckout']['stripe_prod_secret_api_key'];
         $this->Business =  $settings['StripeCheckout']['stripe_email'];
         $this->TestMode =  $settings['StripeCheckout']['stripe_mode'];
+        // TODO: currency
         //$this->Currency =  $settings['StripeCheckout']['currency'];
         $this->Currency =  get_option('_wpmp_curr_name','USD');
         
@@ -171,7 +111,7 @@ select_my_list("stripe_mode","'.$this->TestMode.'");
         // TODO: ClientEmail?
         $Form = " 
 
-                    <form action='/checkout?action=wpmp-payment-notification&class=Stripe' method='POST' name='_wpdm_bnf_{$this->InvoiceNo}' id='_wpdm_bnf_{$this->InvoiceNo}'>
+                    <form action='/checkout?action=wpmp-payment-notification&class=StripeCheckout' method='POST' name='_wpdm_bnf_{$this->InvoiceNo}' id='_wpdm_bnf_{$this->InvoiceNo}'>
                       <script
                         src='//checkout.stripe.com/checkout.js' class='stripe-button'
                         data-key='{$this->StripeAPIKey}'
@@ -195,13 +135,11 @@ select_my_list("stripe_mode","'.$this->TestMode.'");
     }
     
     
-    // TODO: create Stripe payment here, return true or false depending on whether it 
-    // succeeded
+    // For stripe, need to create a payment, this function is triggered by the URL parameters 
+    // ?action=wpmp-payment-notification&class=StripeCheckout, which seems to 
+    // be somewhat insecure; as users could modify this. TODO: is there a way to improve wpmp? 
     //
-    // for stripe, need to create a payment, but do i need ot assume 
-    // verifypayment will be re-run from time to time for things that were 
-    // unable to be verified? Also, will the token returned from stripe.js be 
-    // stored somewhere here where we can get to it? 
+    // 
     function VerifyPayment() {
 
           $stripe_verified = false;
@@ -211,7 +149,7 @@ select_my_list("stripe_mode","'.$this->TestMode.'");
           $this->StripeToken = $_POST['stripeToken'];
           $this->StripeEmail = $_POST['stripeEmail'];
 
-          $order_desc = "Invoice. " . $this->order_info->order_id . " to " . $this->StripeEmail;
+          $order_desc = "Invoice. {$this->order_info->order_id} to {$this->StripeEmail}";
 
           // TODO: possible to include URL to invoice in WP ? we probably want 
           // more descriptive info here: all parts, etc.
@@ -232,11 +170,10 @@ select_my_list("stripe_mode","'.$this->TestMode.'");
           }
 
           if ($stripe_verified) {
-             return true;       
+              return true;       
           } else {
-             return false;
+              return false;
           }
-      
    }
    
    function VerifyNotification() {
