@@ -224,16 +224,6 @@ select_my_list("stripe_mode","'.$this->TestMode.'");
 
           error_log(var_dump($_POST));
 
-          // try {
-          //     $charge = Stripe_Charge::create(array(
-          //       "amount" => 100, // TODO: amount in cents, again
-          //       "currency" => "usd",
-          //       "card" => $token,
-          //       "description" => "payinguser@example.com")
-          //     );
-          // } catch(Stripe_CardError $e) {
-          //     // The card has been declined
-          // }
             
         // is this post data available here now? 
         // array(3) { ["stripeToken"]=> string(28) "tok_15KdcZAGP9Cgrd9djsKycGVi" ["stripeTokenType"]=> string(4) "card" ["stripeEmail"]=> string(22) "ryan.txanson@gmail.com" }
@@ -241,15 +231,31 @@ select_my_list("stripe_mode","'.$this->TestMode.'");
           echo var_dump($_POST);
           echo "\n";
 
-          echo var_dump($this->order_info);
-          echo "\n";
           // order_amount is a string of numbers, 
-          echo var_dump($this->order_amount);
-          echo "\n";
+          // logging array(7) { ["custom"]=> string(13) "54b7057889cc1" ["invoice"]=> string(13) "54b7057889cc1" ["action"]=> string(25) "wpmp-payment-notification" ["class"]=> string(14) "StripeCheckout" ["stripeToken"]=> string(28) "tok_15L1DhAGP9Cgrd9d4fWsud6V" ["stripeTokenType"]=> string(4) "card" ["stripeEmail"]=> string(22) "ryan.txanson@gmail.com" } array(7) { ["custom"]=> string(13) "54b7057889cc1" ["invoice"]=> string(13) "54b7057889cc1" ["action"]=> string(25) "wpmp-payment-notification" ["class"]=> string(14) "StripeCheckout" ["stripeToken"]=> string(28) "tok_15L1DhAGP9Cgrd9d4fWsud6V" ["stripeTokenType"]=> string(4) "card" ["stripeEmail"]=> string(22) "ryan.txanson@gmail.com" } object(stdClass)#144 (15) { ["order_id"]=> string(13) "54b7057889cc1" ["title"]=> string(0) "" ["date"]=> string(10) "1421280632" ["items"]=> string(16) "a:1:{i:0;i:604;}" ["cart_data"]=> string(142) "a:1:{i:604;a:4:{s:8:"quantity";i:1;s:9:"variation";a:2:{i:0;s:1:"1";i:1;s:13:"1418640831817";}s:5:"price";s:5:"49.00";s:8:"discount";s:0:"";}}" ["total"]=> string(5) "53.72" ["order_status"]=> string(10) "Processing" ["payment_status"]=> string(10) "Processing" ["uid"]=> string(1) "1" ["order_notes"]=> string(0) "" ["payment_method"]=> string(14) "StripeCheckout" ["shipping_method"]=> string(21) "Flat Rate (Minnesota)" ["shipping_cost"]=> string(4) "4.72" ["billing_shipping_data"]=> string(583) "a:2:{s:7:"billing";a:11:{s:10:"first_name";s:4:"Ryan";s:9:"last_name";s:7:"Johnson";s:7:"company";s:4:"asdf";s:9:"address_1";s:18:"1234 Mulberry Lane";s:9:"address_2";s:0:"";s:4:"city";s:7:"St Paul";s:8:"postcode";s:5:"55401";s:7:"country";s:2:"US";s:5:"state";s:9:"Minnesota";s:5:"email";s:22:"ryan.txanson@gmail.com";s:5:"phone";s:12:"651-690-5432";}s:10:"shippingin";a:9:{s:10:"first_name";s:4:"Ryan";s:9:"last_name";s:7:"Johnson";s:7:"company";s:0:"";s:9:"address_1";s:0:"";s:9:"address_2";s:0:"";s:4:"city";s:0:"";s:8:"postcode";s:0:"";s:7:"country";s:0:"";s:5:"state";s:0:"";}}" ["cart_discount"]=> string(1) "0" } string(5) "53.72" float(5372)
+          // echo var_dump($this->order_amount);
+          // echo "\n";
+          // echo var_dump($order_amount_cents);
+          // echo "\n";
 
-          $order_amount_cents  = order_amount_to_cents($this->order_amount);
-          echo var_dump($order_amount_cents);
+          $order_desc = "Invoice. " . $this->order_info->invoice . " to " . $this->order_info->email;
+
+          var $stripe_order = array(
+                "amount" => order_amount_to_cents($this->order_amount),
+                "currency" => "usd",
+                "card" => $this->StripeToken,
+                "description" => $order_desc,
+          );
+
+          echo var_dump($stripe_order);
           echo "\n";
+              
+          
+          try {
+              $charge = Stripe_Charge::create();
+          } catch(Stripe_CardError $e) {
+              // The card has been declined
+          }
 
           die();
 
