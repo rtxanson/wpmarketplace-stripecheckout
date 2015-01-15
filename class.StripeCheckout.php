@@ -240,7 +240,7 @@ select_my_list("stripe_mode","'.$this->TestMode.'");
 
           $order_desc = "Invoice. " . $this->order_info->invoice . " to " . $this->order_info->email;
 
-          var $stripe_order = array(
+          $stripe_order = array(
                 "amount" => order_amount_to_cents($this->order_amount),
                 "currency" => "usd",
                 "card" => $this->StripeToken,
