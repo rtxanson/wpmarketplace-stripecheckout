@@ -178,7 +178,7 @@ select_my_list("stripe_mode","'.$this->TestMode.'");
         $amount_cents = order_amount_to_cents($this->Amount);
         // TODO: https for stripe include
         $Stripe = plugins_url().'/wpdm-premium-packages/images/Stripe.png';
-        // TODO: action='/stripe/checkout' ? 
+        // TODO: ClientEmail?
         $Form = " 
 
                     <form action='/checkout?action=wpmp-payment-notification&class=Stripe' method='POST' name='_wpdm_bnf_{$this->InvoiceNo}' id='_wpdm_bnf_{$this->InvoiceNo}'>
