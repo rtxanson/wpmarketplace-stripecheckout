@@ -249,8 +249,6 @@ select_my_list("stripe_mode","'.$this->TestMode.'");
               $this->VerificationError = var_dump($e);
           }
 
-          die();
-
           if ($stripe_verified) {
              return true;       
           } else {
