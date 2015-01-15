@@ -239,7 +239,7 @@ select_my_list("stripe_mode","'.$this->TestMode.'");
         // array(3) { ["stripeToken"]=> string(28) "tok_15KdcZAGP9Cgrd9djsKycGVi" ["stripeTokenType"]=> string(4) "card" ["stripeEmail"]=> string(22) "ryan.txanson@gmail.com" }
 
           echo var_dump($_POST);
-          echo "\n"
+          echo "\n";
 
           echo var_dump($this->order_info);
           echo "\n";
