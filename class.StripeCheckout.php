@@ -92,11 +92,6 @@ if(!class_exists('StripeCheckout')){
 class StripeCheckout extends CommonVers{
     var $TestMode;
     
-    // TODO: 
-    var $GatewayUrl = "http://www.Stripe.com/cgi-bin/webscr";
-    // TODO: 
-    var $GatewayUrl_TestMode = "http://www.sandbox.Stripe.com/cgi-bin/webscr";
-
     var $Business;
     var $StripeTestAPIKey;
     var $StripeProdAPIKey;
@@ -118,16 +113,9 @@ class StripeCheckout extends CommonVers{
     function StripeCheckout($TestMode = 0){
         $this->TestMode = $TestMode;                
 
-        if($TestMode==1) {
-            $this->GatewayUrl = $this->GatewayUrl_TestMode;
-        }
-        
         $settings = maybe_unserialize(get_option('_wpmp_settings'));
         $this->Enabled= isset($settings['StripeCheckout']['enabled'])?$settings['StripeCheckout']['enabled']:"";
-        $this->ReturnUrl = $settings['StripeCheckout']['return_url'];
-        //$this->NotifyUrl = home_url('/Stripe/notify/');
         $this->NotifyUrl = home_url('?action=wpmp-payment-notification&class=StripeCheckout');
-        $this->CancelUrl = $settings['StripeCheckout']['cancel_url'];
         $this->StripeTestAPIKey = $settings['StripeCheckout']['stripe_test_api_key'];
         $this->StripeProdAPIKey = $settings['StripeCheckout']['stripe_prod_api_key'];
         $this->StripeTestSecretAPIKey = $settings['StripeCheckout']['stripe_test_secret_api_key'];
@@ -137,10 +125,6 @@ class StripeCheckout extends CommonVers{
         //$this->Currency =  $settings['StripeCheckout']['currency'];
         $this->Currency =  get_option('_wpmp_curr_name','USD');
         
-        if($settings['StripeCheckout']['stripe_mode']=='sandbox') {
-            $this->GatewayUrl = $this->GatewayUrl_TestMode;
-        }
-
         if($settings['StripeCheckout']['stripe_mode']=='sandbox') {
             $this->StripeAPIKey = $this->StripeTestAPIKey;
             $this->StripeSecretAPIKey = $this->StripeTestSecretAPIKey;
@@ -163,12 +147,10 @@ class StripeCheckout extends CommonVers{
 <tr><td>'.__("Enable/Disable:","wpmarketplace").'</td><td><input type="checkbox" value="1" '.$enabled.' name="_wpmp_settings[StripeCheckout][enabled]" style=""> '.__("Enable Stripe","wpmarketplace").'</td></tr>
 <tr><td>'.__("Stripe Mode:","wpmarketplace").'</td><td><select id="stripe_mode" name="_wpmp_settings[StripeCheckout][stripe_mode]"><option value="live">Live</option><option value="sandbox" >SandBox</option></select></td></tr>
 <tr><td>'.__("Stripe Email:","wpmarketplace").'</td><td><input type="text" name="_wpmp_settings[StripeCheckout][stripe_email]" value="'.$this->Business.'" /></td></tr>
-<tr><td>'.__("Cancel Url:","wpmarketplace").'</td><td><input type="text" name="_wpmp_settings[StripeCheckout][cancel_url]" value="'.$this->CancelUrl.'" /></td></tr>
 <tr><td>'.__("Stripe Test Publishable Key:","wpmarketplace").'</td><td><input type="text" name="_wpmp_settings[StripeCheckout][stripe_test_api_key]" value="'.$this->StripeTestAPIKey.'" /></td></tr>
 <tr><td>'.__("Stripe Prod Publishable Key:","wpmarketplace").'</td><td><input type="text" name="_wpmp_settings[StripeCheckout][stripe_prod_api_key]" value="'.$this->StripeProdAPIKey.'" /></td></tr>
 <tr><td>'.__("Stripe Test Secret Key:","wpmarketplace").'</td><td><input type="text" name="_wpmp_settings[StripeCheckout][stripe_test_secret_api_key]" value="'.$this->StripeTestSecretAPIKey.'" /></td></tr>
 <tr><td>'.__("Stripe Prod Secret Key:","wpmarketplace").'</td><td><input type="text" name="_wpmp_settings[StripeCheckout][stripe_prod_secret_api_key]" value="'.$this->StripeProdSecretAPIKey.'" /></td></tr>
-<tr><td>'.__("Return Url:","wpmarketplace").'</td><td><input type="text" name="_wpmp_settings[StripeCheckout][return_url]" value="'.$this->ReturnUrl.'" /></td></tr>
 
 </table>
 <script>
@@ -191,9 +173,9 @@ select_my_list("stripe_mode","'.$this->TestMode.'");
 
                     <form action='/checkout?action=wpmp-payment-notification&class=Stripe' method='POST' name='_wpdm_bnf_{$this->InvoiceNo}' id='_wpdm_bnf_{$this->InvoiceNo}'>
                       <script
-                        src='http://checkout.stripe.com/checkout.js' class='stripe-button'
+                        src='//checkout.stripe.com/checkout.js' class='stripe-button'
                         data-key='{$this->StripeAPIKey}'
-                        data-image='/square-image.png'
+                        data-image='/wp-content/uploads/2014/02/Crown.png'
                         data-name='{$this->Business}'
                         data-currency='{$this->Currency}'
                         data-amount='{$amount_cents}'>
