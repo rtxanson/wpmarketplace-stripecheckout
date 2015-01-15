@@ -140,10 +140,13 @@ select_my_list("stripe_mode","'.$this->TestMode.'");
     // be somewhat insecure; as users could modify this. TODO: is there a way to improve wpmp? 
     //
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 <<<<<<< HEAD
 =======
     // 
 >>>>>>> 30a124e54a697624e3f790d98be86ace31344361
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
     function VerifyPayment() {
@@ -157,13 +160,17 @@ select_my_list("stripe_mode","'.$this->TestMode.'");
 
           global $current_user; 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 <<<<<<< HEAD
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 
           // this extracts address to $shippingin and $billing. Surprise new 
           // variables not from a function return!
           //
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
           $usermeta=unserialize(get_user_meta($current_user->ID, 'user_billing_shipping',true));
           @extract($usermeta);
@@ -184,6 +191,8 @@ select_my_list("stripe_mode","'.$this->TestMode.'");
           $order_desc = "Invoice. {$this->order_info->order_id} to {$this->StripeEmail}";
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
           $usermeta=unserialize(get_user_meta($current_user->ID, 'user_billing_shipping',true));
           @extract($usermeta);
 
@@ -199,7 +208,11 @@ select_my_list("stripe_mode","'.$this->TestMode.'");
           // TODO: possible to include URL to invoice in WP ? we probably want 
           // more descriptive info here: all parts, etc.
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 >>>>>>> 30a124e54a697624e3f790d98be86ace31344361
+=======
+          //
+>>>>>>> Stashed changes
 =======
           //
 >>>>>>> Stashed changes
@@ -209,7 +222,10 @@ select_my_list("stripe_mode","'.$this->TestMode.'");
                 "card" => $this->StripeToken,
                 "description" => $order_desc,
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 <<<<<<< HEAD
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
                 "shipping" => array(
@@ -224,9 +240,12 @@ select_my_list("stripe_mode","'.$this->TestMode.'");
                     "name" => $billing["first_name"] . " " . $billing["last_name"],
                 ),
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
                 "shipping" => $shipping_address,
 >>>>>>> 30a124e54a697624e3f790d98be86ace31344361
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
           );
