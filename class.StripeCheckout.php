@@ -139,6 +139,10 @@ select_my_list("stripe_mode","'.$this->TestMode.'");
     // ?action=wpmp-payment-notification&class=StripeCheckout, which seems to 
     // be somewhat insecure; as users could modify this. TODO: is there a way to improve wpmp? 
     //
+<<<<<<< HEAD
+=======
+    // 
+>>>>>>> 30a124e54a697624e3f790d98be86ace31344361
     function VerifyPayment() {
 
           $stripe_verified = false;
@@ -149,6 +153,7 @@ select_my_list("stripe_mode","'.$this->TestMode.'");
           $this->StripeEmail = $_POST['stripeEmail'];
 
           global $current_user; 
+<<<<<<< HEAD
 
           // this extracts address to $shippingin and $billing. Surprise new 
           // variables not from a function return!
@@ -168,11 +173,36 @@ select_my_list("stripe_mode","'.$this->TestMode.'");
           // TODO: possible to include URL to invoice in WP ? we probably want 
           // more descriptive info here: all parts, etc.
           //
+=======
+          $order_desc = "Invoice. {$this->order_info->order_id} to {$this->StripeEmail}";
+          $usermeta=unserialize(get_user_meta($current_user->ID, 'user_billing_shipping',true));
+          @extract($usermeta);
+
+          $shipping_address = <<<ADR
+$billing[first_name] $billing[last_name]
+$billing[company]
+$billing[address_1]
+$billing[address_2]
+$billing[city]
+$billing[state]
+$billing[postcode]
+$billing[country]
+ADR;
+
+          echo $shipping_address;
+          echo "\n\n";
+          echo $order_desc;
+
+          die()
+          // TODO: possible to include URL to invoice in WP ? we probably want 
+          // more descriptive info here: all parts, etc.
+>>>>>>> 30a124e54a697624e3f790d98be86ace31344361
           $stripe_order = array(
                 "amount" => order_amount_to_cents($this->order_amount),
                 "currency" => "usd",
                 "card" => $this->StripeToken,
                 "description" => $order_desc,
+<<<<<<< HEAD
                 "shipping" => array(
                     "address" => array(
                         "line1" => $address["address_1"],
@@ -184,6 +214,9 @@ select_my_list("stripe_mode","'.$this->TestMode.'");
                     ),
                     "name" => $billing["first_name"] . " " . $billing["last_name"],
                 ),
+=======
+                "shipping" => $shipping_address,
+>>>>>>> 30a124e54a697624e3f790d98be86ace31344361
           );
 
           try {
