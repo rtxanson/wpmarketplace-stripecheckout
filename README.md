@@ -1,6 +1,7 @@
 # WP MarketPlace Stripe Checkout gateway
 
-Incomplete as yet.
+Incomplete as yet. Hopefully this saves trouble for someone who finds they need
+to use WPMarketPlace and Stripe.
 
 This uses [Stripe Checkout](https://stripe.com/docs/checkout), which is a two part process:
 
